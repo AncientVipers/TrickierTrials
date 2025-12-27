@@ -1,0 +1,8 @@
+name: TrickierTrials
+version: '1.3.1-SNAPSHOT'
+main: de.t14d3.trickiertrials.TrickierTrials
+author: t14d3
+api-version: '1.21'
+commands:
+  trickiertrials:
+    description: Main command for Trickier Trials

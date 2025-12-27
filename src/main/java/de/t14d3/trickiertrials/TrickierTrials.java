@@ -33,7 +33,7 @@ public final class TrickierTrials extends JavaPlugin implements CommandExecutor 
         // Register event listeners
         this.getServer().getPluginManager().registerEvents(new TrialSpawnerListener(this, strengthenTrialMobs, glowingEffect, secret, secretName), this);
         this.getServer().getPluginManager().registerEvents(new TrialChamberProtector(this, getTrialChamberMaterials(), decayPlacedBlocks, regenerateBrokenBlocks), this);
-        this.getServer().getPluginManager().registerEvents(new TrialDeathListener(), this);
+        this.getServer().getPluginManager().registerEvents(new TrialDeathListener(this), this);
         this.getServer().getPluginManager().registerEvents(new TrialVaultRefresher(this, trialVaultResetTime), this);
 
         // Register command executor
@@ -66,7 +66,9 @@ public final class TrickierTrials extends JavaPlugin implements CommandExecutor 
         regenerateBrokenBlocks = config.getBoolean("regenerate-broken-blocks", true);
         strengthenTrialMobs = config.getBoolean("strengthen-trial-mobs", true);
         trialVaultResetTime = config.getLong("trial-vault-reset-time", 86400000L);
-        glowingEffect = config.getBoolean("modules.glowing-effect", true);
+        // Config path was previously under "modules.glowing-effect" but is now top-level
+        // (as in the shipped config.yml). Keep both for compatibility.
+        glowingEffect = config.getBoolean("glowing-effect", config.getBoolean("modules.glowing-effect", true));
         secret = config.getBoolean("easter-egg", false);
         secretName = config.getString("easter-egg-name", "Klein Tiade");
 
@@ -80,6 +82,18 @@ public final class TrickierTrials extends JavaPlugin implements CommandExecutor 
         if (config.get("mining-fatigue-level") == null) {
             config.set("mining-fatigue-level", 2);
         }
+
+        // Extra rewards (mob drops) defaults
+        if (config.get("extra-rewards") == null) {
+            config.set("extra-rewards.enabled", false);
+            config.set("extra-rewards.replace-default-drops", false);
+            config.set("extra-rewards.rewards", List.of(
+                    // Example:
+                    // Map.of("material", "DIAMOND", "amount", 1, "chance", 0.02)
+            ));
+        }
+
+        saveConfig();
     }
 
     public List<Material> getTrialChamberMaterials() {

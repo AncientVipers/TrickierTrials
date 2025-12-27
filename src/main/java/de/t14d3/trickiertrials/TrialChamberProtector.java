@@ -98,7 +98,12 @@ public class TrialChamberProtector implements Listener {
 
     @EventHandler
     public void onBlockBreakStart(BlockBreakProgressUpdateEvent event) {
-        if (plugin.getConfig().getInt("modules.mining-fatigue") <= 0) return;
+        // "mining-fatigue-level" is the intended toggle: 0 (or lower) disables the effect.
+        // Backwards compatibility: if someone still uses the old config path
+        // "modules.mining-fatigue" we respect it too.
+        int legacyToggle = plugin.getConfig().getInt("modules.mining-fatigue", 1);
+        int level = plugin.getConfig().getInt("mining-fatigue-level", 2);
+        if (legacyToggle <= 0 || level <= 0) return;
 
         Block block = event.getBlock();
         Location blockLocation = block.getLocation();
@@ -106,7 +111,9 @@ public class TrialChamberProtector implements Listener {
         block.getChunk().getStructures(Structure.TRIAL_CHAMBERS).forEach(structure -> {
             if (structure.getBoundingBox().contains(blockLocation.toVector())) {
                 Player player = (Player) event.getEntity();
-                player.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 10, plugin.getConfig().getInt("mining-fatigue-level", 2)));
+                // amplifier is 0-based (0 = level I). Config value is treated as the amplifier for
+                // existing installs; when set to 0 it disables the effect (handled above).
+                player.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 10, level));
             }
         });
     }

@@ -25,6 +25,9 @@ public class TrialSpawnerListener implements Listener {
     private final boolean secret;
     private final String secretName;
 
+    private static final NamespacedKey TRIAL_SPAWNED_KEY = new NamespacedKey("trickiertrials", "trialspawned");
+    private static final NamespacedKey TRIAL_TIER_KEY = new NamespacedKey("trickiertrials", "trialtier");
+
     public TrialSpawnerListener(JavaPlugin plugin, boolean strengthenTrialMobs, boolean glowingEffect, boolean secret, String secretName) {
         this.strengthenTrialMobs = strengthenTrialMobs;
         this.glowingEffect = glowingEffect;
@@ -261,7 +264,11 @@ public class TrialSpawnerListener implements Listener {
         // Randomly assign a sword if the entity has no item in the main hand
         assignRandomSword(entity);
 
-        entity.getPersistentDataContainer().set(new NamespacedKey("trickiertrials", "trialspawned"), PersistentDataType.INTEGER, 1);
+        // Tag the mob so we can apply special drops later.
+        entity.getPersistentDataContainer().set(TRIAL_SPAWNED_KEY, PersistentDataType.INTEGER, 1);
+
+        // Store the determined tier so rewards can be configured per tier.
+        entity.getPersistentDataContainer().set(TRIAL_TIER_KEY, PersistentDataType.STRING, trialTiers.name());
 
 
         // Easter Egg
