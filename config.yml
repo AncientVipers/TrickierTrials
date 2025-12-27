@@ -1,0 +1,158 @@
+blocks-to-protect:
+- COPPER_BLOCK
+- WAXED_COPPER_BLOCK
+- WEATHERED_COPPER
+- WAXED_WEATHERED_COPPER
+- EXPOSED_COPPER
+- WAXED_EXPOSED_COPPER
+- OXIDIZED_COPPER
+- WAXED_OXIDIZED_COPPER
+- CUT_COPPER
+- WAXED_CUT_COPPER
+- OXIDIZED_CUT_COPPER
+- WAXED_OXIDIZED_CUT_COPPER
+- WAXED_CHISELED_COPPER
+- WAXED_OXIDIZED_CHISELED_COPPER
+- POLISHED_TUFF
+- TUFF_BRICKS
+- CHISELED_TUFF_BRICKS
+- CHISELED_TUFF
+- WAXED_CUT_COPPER_STAIRS
+- WAXED_OXIDIZED_CUT_COPPER_STAIRS
+- WAXED_OXIDIZED_CUT_COPPER_SLAB
+- WAXED_CUT_COPPER_SLAB
+- WAXED_COPPER_GRATE
+- WAXED_OXIDIZED_COPPER_GRATE
+- LADDER
+- LIGHT_GRAY_STAINED_GLASS
+- WAXED_COPPER_BULB
+- WAXED_EXPOSED_COPPER_BULB
+- WAXED_WEATHERED_COPPER_BULB
+- WAXED_OXIDIZED_COPPER_BULB
+
+glowing-effect: false
+
+# Mining fatigue amplifier (0-based). Set to 0 to disable the effect completely.
+# Examples:
+#   1 = Mining Fatigue II
+#   2 = Mining Fatigue III
+mining-fatigue-level: 0
+
+decay-placed-blocks: false
+decay-delay: 10
+regenerate-broken-blocks: false
+regenerate-delay: 10
+strengthen-trial-mobs: true
+
+# Extra rewards (drops) for mobs spawned by a Trial Spawner.
+# This only affects mobs that are tagged by this plugin (no random overworld mobs).
+extra-rewards:
+  enabled: false
+  
+  # If true: clears the mob's drops first.
+  # If false: keeps the (possibly filtered) vanilla drops and adds rewards on top.
+  replace-default-drops: false
+  
+  # Cap how many total ITEM units (not stacks) can be added per mob death.
+  # -1 or 0 = no cap
+  max-items-per-kill: -1
+  # - rolls: 1
+  #   pick: WEIGHTED
+  #   unique: false
+  #   entries:
+  #     - material: EMERALD
+  #       amount: {min: 1, max: 3}
+  #       weight: 10
+
+    # ✅ All difficulties / tiers go here
+  tiers:
+    DEFAULT:
+      replace-global: false
+      pools: []
+      per-entity: {}
+    
+    NORMAL:
+      replace-global: false
+      pools:
+      - rolls: 1
+        pick: WEIGHTED
+        unique: false
+        entries:
+        - material: EMERALD
+          amount:
+            min: 1
+            max: 4
+          weight: 12
+        - material: GOLD_INGOT
+          amount:
+            min: 1
+            max: 3
+          weight: 10
+      per-entity: {}
+    
+    HARD:
+      replace-global: false
+      pools:
+      - rolls: 2
+        pick: WEIGHTED
+        unique: false
+        entries:
+        - material: EMERALD
+          amount:
+            min: 2
+            max: 8
+          weight: 10
+        - material: DIAMOND
+          amount:
+            min: 1
+            max: 2
+          weight: 2
+        - type: COMMAND
+          as-console: true
+          commands:
+          - eco give %player% 250
+          weight: 2
+      per-entity:
+        BREEZE:
+          pools:
+          - rolls: 1
+            pick: WEIGHTED
+            entries:
+            - material: BREEZE_ROD
+              amount:
+                min: 1
+                max: 2
+              weight: 8
+            - type: COMMAND
+              as-console: true
+              commands:
+              - say %player% killed a HARD Breeze at %x% %y% %z%
+              weight: 1
+    
+    EXTREME:
+      replace-global: false
+      pools:
+      - rolls: 4
+        pick: WEIGHTED
+        unique: false
+        entries:
+        - material: DIAMOND
+          amount:
+            min: 1
+            max: 3
+          weight: 4
+        - material: NETHERITE_SCRAP
+          amount: 1
+          weight: 1
+        - type: COMMAND
+          as-console: true
+          commands:
+          - eco give %player% 750
+          weight: 2
+      per-entity: {}
+
+# COMMAND reward placeholders:
+# %player% %uuid% %entity% %tier% %world% %x% %y% %z%
+# Tip: you can include a leading "/" in commands; it will be stripped.
+
+trial-vault-reset-time: 86400000
