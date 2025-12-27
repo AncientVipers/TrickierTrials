@@ -1,7 +1,7 @@
-# 📦 TrickierTrials — Changelog
+# 📦 TrickierTrials — Changelog  **(BY T14D3, changed by AncientVipers)**
 
 ## 🚀 Version: Custom Rewards & Fixes Update
-
+Full credits to T14D3, edited by me.
 ---
 
 ## 🐛 Fixed
